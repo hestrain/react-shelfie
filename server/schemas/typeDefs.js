@@ -1,6 +1,6 @@
 const typeDefs = `
-  type Thought {
-    _id: ID
+  type User {
+    userId: ID
     username: String
     email: String
     password: String
@@ -8,7 +8,7 @@ const typeDefs = `
   }
 
   type Book {
-  authors: [{String}]
+  authors: [String]
   description: String
   bookId: String
   image: String
@@ -16,16 +16,22 @@ const typeDefs = `
   title: String
   }
 
+   type Auth {
+    token: ID!
+    user: User
+  }
+
   type Query {
     books: [Book]!
-    book(bookId: bookId!): Book
+    book(bookId: String!): Book
   }
 
   type Mutation {
     addUser(userName: String!, password: String!, emailAddress: String!): User
     addBook(userId: ID!, bookId: String!): Book
-    removeUser(userId: ID!): User
-    removeBook(userId: ID!, bookId: String!): Book
+    removeBook(bookId: String!): Book
+        login(email: String!, password: String!): Auth
+
   }
 `;
 
