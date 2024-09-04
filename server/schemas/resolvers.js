@@ -5,14 +5,14 @@ const {signToken, isCorrectPassword} = require("../utils/auth") ;
 
 const resolvers = {
   Query: {
-    books: async () => {
-      return Book.find();
-    },
-
-    book: async (parent, { bookId }) => {
-      return Book.findOne({ bookId: bookId });
+    me: async (parent, args, context) => {
+      if (context.user) {
+        return Profile.findOne({ _id: context.user._id });
+      }
+      throw AuthenticationError;
     },
   },
+  
 
   Mutation: {
     addBook: async (parent, { bookId, userId }) => {
