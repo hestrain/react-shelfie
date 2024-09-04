@@ -7,9 +7,10 @@ import {
   Card,
   Row
 } from 'react-bootstrap';
+import { ADD_BOOK } from '../utils/mutations';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
 const SearchBooks = () => {
@@ -60,7 +61,7 @@ const SearchBooks = () => {
   };
 
   // create function to handle saving a book to our database
-  const handleSaveBook = async (bookId) => {
+  const handleSaveBook = async () => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
@@ -70,9 +71,13 @@ const SearchBooks = () => {
     if (!token) {
       return false;
     }
+    const [addBook, { error }] = useMutation(ADD_BOOK);
 
     try {
-      const response = await saveBook(bookToSave, token);
+
+      const { data} = await addBook ({
+        variables: {...bookToSave}
+      })
 
       if (!response.ok) {
         throw new Error('something went wrong!');
